@@ -24,10 +24,6 @@ public class MainActivityFragment extends Fragment {
         return v;
     }
 
-    @OnClick({R.id.btn_spotify, R.id.btn_scores,R.id.btn_lib, R.id.btn_build, R.id.btn_xyz, R.id.btn_cap})
-    public void clickStartApp(Button button){
-        Snackbar.make(button, "When complete, this will start: " + button.getText(), Snackbar.LENGTH_LONG).show();
-    }
 
     @Override
     public void onDestroyView() {

@@ -27,4 +27,22 @@
         <item name="android:paddingRight">8dp</item>
     </style>
 
+    <style name="Text">
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">@color/text_normal</item>
+    </style>
+
+    <style name="Text.Medium">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="Text.Large">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="Text.Large.Title">
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+
 </resources>

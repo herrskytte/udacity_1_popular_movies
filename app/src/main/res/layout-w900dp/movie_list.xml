@@ -1,10 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
     android:baselineAligned="false"
     android:divider="?android:attr/dividerHorizontal"
     android:orientation="horizontal"
@@ -17,16 +14,16 @@
     
     -->
 
-    <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <GridView
         android:id="@+id/movie_list"
-        android:name="no.skytte.popularmovies.MovieListFragment"
         android:layout_width="@dimen/item_width"
         android:layout_height="match_parent"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        app:layoutManager="LinearLayoutManager"
-        tools:context="no.skytte.popularmovies.MovieListActivity"
+        android:columnWidth="150dp"
+        android:numColumns="auto_fit"
+        android:stretchMode="columnWidth"
+        android:horizontalSpacing="0dp"
+        android:verticalSpacing="0dp"
+        android:drawSelectorOnTop="true"
         tools:listitem="@layout/movie_list_content" />
 
     <FrameLayout

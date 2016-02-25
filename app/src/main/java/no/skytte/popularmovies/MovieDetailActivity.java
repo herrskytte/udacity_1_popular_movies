@@ -1,15 +1,20 @@
 package no.skytte.popularmovies;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.ActionBar;
-import android.support.v4.app.NavUtils;
-import android.view.MenuItem;
+import android.widget.ImageView;
+
+import com.squareup.picasso.Picasso;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import no.skytte.popularmovies.models.Movie;
 
 /**
  * An activity representing a single Movie detail screen. This
@@ -19,27 +24,30 @@ import android.view.MenuItem;
  */
 public class MovieDetailActivity extends AppCompatActivity {
 
+    @Bind(R.id.detail_toolbar) Toolbar mToolbar;
+    @Bind(R.id.toolbar_layout) CollapsingToolbarLayout mAppBarLayout;
+    @Bind(R.id.background_poster) ImageView mBackgroundImage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_detail);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
-        setSupportActionBar(toolbar);
+        ButterKnife.bind(this);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
-        // Show the Up button in the action bar.
+        setSupportActionBar(mToolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+
+        Movie selectedMovie = (Movie) getIntent().getSerializableExtra(MovieDetailFragment.ARG_MOVIE);
+        if(selectedMovie == null){
+            finish();
+            return;
+        }
+        mAppBarLayout.setTitle(selectedMovie.getTitle());
+        String path = "http://image.tmdb.org/t/p/w500" + selectedMovie.getPosterPath();
+        Picasso.with(this).load(path).into(mBackgroundImage);
 
         // savedInstanceState is non-null when there is fragment state
         // saved from previous configurations of this activity
@@ -54,8 +62,7 @@ public class MovieDetailActivity extends AppCompatActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(MovieDetailFragment.ARG_ITEM_ID,
-                    getIntent().getStringExtra(MovieDetailFragment.ARG_ITEM_ID));
+            arguments.putSerializable(MovieDetailFragment.ARG_MOVIE, selectedMovie);
             MovieDetailFragment fragment = new MovieDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
@@ -64,20 +71,4 @@ public class MovieDetailActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == android.R.id.home) {
-            // This ID represents the Home or Up button. In the case of this
-            // activity, the Up button is shown. Use NavUtils to allow users
-            // to navigate up one level in the application structure. For
-            // more details, see the Navigation pattern on Android Design:
-            //
-            // http://developer.android.com/design/patterns/navigation.html#up-vs-back
-            //
-            NavUtils.navigateUpTo(this, new Intent(this, MovieListActivity.class));
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 }

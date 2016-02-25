@@ -22,6 +22,14 @@
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:toolbarId="@+id/toolbar">
+            <ImageView
+                android:id="@+id/background_poster"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:src="@drawable/example_poster"
+                android:scaleType="centerCrop"
+                android:alpha="0.7"
+                tools:ignore="ContentDescription" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/detail_toolbar"
@@ -39,15 +47,5 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical|start"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/stat_notify_chat"
-        app:layout_anchor="@+id/movie_detail_container"
-        app:layout_anchorGravity="top|end" />
 
 </android.support.design.widget.CoordinatorLayout>

@@ -1,9 +1,49 @@
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/movie_detail"
-    style="?android:attr/textAppearanceLarge"
-    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_width="match_parent"
     android:padding="16dp"
-    android:textIsSelectable="true"
-    tools:context="no.skytte.popularmovies.MovieDetailFragment" />
+    android:orientation="vertical">
+    <TextView
+        android:id="@+id/movie_detail"
+        style="@style/Text.Medium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textIsSelectable="true"
+        tools:text="Description of movie. " />
+    <TextView
+        android:id="@+id/release_date_title"
+        style="@style/Text.Large.Title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="16dp"
+        android:textIsSelectable="true"
+        android:text="@string/releasedate_title" />
+    <TextView
+        android:id="@+id/release_date"
+        style="@style/Text.Medium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="8dp"
+        android:textIsSelectable="true"
+        tools:text="22.03.2016" />
+    <TextView
+        android:id="@+id/votes_title"
+        style="@style/Text.Large.Title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="16dp"
+        android:textIsSelectable="true"
+        android:text="@string/votes_title" />
+    <TextView
+        android:id="@+id/votes"
+        style="@style/Text.Medium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="8dp"
+        android:textIsSelectable="true"
+        tools:text="4.2" />
+</LinearLayout>
+
+

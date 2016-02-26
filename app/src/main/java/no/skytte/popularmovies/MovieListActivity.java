@@ -1,6 +1,7 @@
 package no.skytte.popularmovies;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -11,9 +12,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.TextView;
 
 import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -31,12 +35,14 @@ import no.skytte.popularmovies.models.SearchResult;
 public class MovieListActivity extends AppCompatActivity {
 
     private static final String SORT_POPULAR = "popularity.desc";
+    private static final String SORT_RATED = "vote_average.desc";
 
     private boolean mTwoPane;
-    private String mCurrentSortOrder;
+    private String mCurrentSortOrder = SORT_POPULAR;
 
     @Bind(R.id.movie_list) GridView gridView;
     @Bind(R.id.toolbar) Toolbar toolbar;
+    @Bind(R.id.empty_list_view) TextView emptyView;
 
     MovieAdapter mAdapter;
 
@@ -52,6 +58,7 @@ public class MovieListActivity extends AppCompatActivity {
 
         mAdapter = new MovieAdapter(this);
         gridView.setAdapter(mAdapter);
+        gridView.setEmptyView(emptyView);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -82,7 +89,6 @@ public class MovieListActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         new MovieListDownloader().execute();
-
     }
 
     @Override
@@ -93,22 +99,35 @@ public class MovieListActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        String currentSortOrder = mCurrentSortOrder;
         switch (item.getItemId()){
-            case R.id.action_sort_popular : break;
+            case R.id.action_sort_popular :
+                mCurrentSortOrder = SORT_POPULAR;
+                break;
+            case R.id.action_sort_rated :
+                mCurrentSortOrder = SORT_RATED;
+        }
+        if(!mCurrentSortOrder.equals(currentSortOrder)){
+            new MovieListDownloader().execute();
         }
         return super.onOptionsItemSelected(item);
     }
 
     private class MovieListDownloader extends AsyncTask<Void, Void, SearchResult>{
 
-        private String APIKEY = "d9987f6d38c9c183d75323198a12406c";
+        private String APIKEY = "input_key_here";
+        private String BASE_URL = "http://api.themoviedb.org/3/discover/movie";
 
         @Override
         protected SearchResult doInBackground(Void... params) {
             try {
-                String url = "http://api.themoviedb.org/3/discover/movie?";
-                url += "sort_by=popularity.desc";
-                url += "&api_key=" + APIKEY;
+                String url = Uri.parse(BASE_URL)
+                        .buildUpon()
+                        .appendQueryParameter("api_key", APIKEY)
+                        .appendQueryParameter("vote_count.gte", "50")
+                        .appendQueryParameter("sort_by", mCurrentSortOrder)
+                        .build()
+                        .toString();
                 RestTemplate restTemplate = new RestTemplate();
                 restTemplate.getMessageConverters().add(new GsonHttpMessageConverter());
                 return restTemplate.getForObject(url, SearchResult.class);
@@ -122,79 +141,15 @@ public class MovieListActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(SearchResult movies) {
-            Log.e("MainActivity", "Result ok!");
-            mAdapter.setData(movies.getResults());
+            if(movies != null){
+                Log.i("MainActivity", "Result ok!");
+                mAdapter.setData(movies.getResults());
+            }
+            else{
+                Log.i("MainActivity", "No results!");
+                mAdapter.setData(new ArrayList<Movie>());
+            }
         }
 
     }
-
-
-//    public class MovieListAdapter
-//            extends RecyclerView.Adapter<MovieListAdapter.ViewHolder> {
-//
-//        private final List<Movie.DummyItem> mValues;
-//
-//        public MovieListAdapter(List<Movie.DummyItem> items) {
-//            mValues = items;
-//        }
-//
-//        @Override
-//        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-//            View view = LayoutInflater.from(parent.getContext())
-//                    .inflate(R.layout.movie_list_content, parent, false);
-//            return new ViewHolder(view);
-//        }
-//
-//        @Override
-//        public void onBindViewHolder(final ViewHolder holder, int position) {
-//            holder.mItem = mValues.get(position);
-//            holder.mIdView.setText(mValues.get(position).id);
-//            holder.mContentView.setText(mValues.get(position).content);
-//
-//            holder.mView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if (mTwoPane) {
-//                        Bundle arguments = new Bundle();
-//                        arguments.putString(MovieDetailFragment.ARG_MOVIE, holder.mItem.id);
-//                        MovieDetailFragment fragment = new MovieDetailFragment();
-//                        fragment.setArguments(arguments);
-//                        getSupportFragmentManager().beginTransaction()
-//                                .replace(R.id.movie_detail_container, fragment)
-//                                .commit();
-//                    } else {
-//                        Context context = v.getContext();
-//                        Intent intent = new Intent(context, MovieDetailActivity.class);
-//                        intent.putExtra(MovieDetailFragment.ARG_MOVIE, holder.mItem.id);
-//
-//                        context.startActivity(intent);
-//                    }
-//                }
-//            });
-//        }
-//
-//        @Override
-//        public int getItemCount() {
-//            return mValues.size();
-//        }
-//
-//        public class ViewHolder extends RecyclerView.ViewHolder {
-//            public final View mView;
-//            public final TextView mIdView;
-//            public final TextView mContentView;
-//            public Movie.DummyItem mItem;
-//
-//            public ViewHolder(View view) {
-//                super(view);
-//                mView = view;
-//                mIdView = (TextView) view.findViewById(R.id.id);
-//                mContentView = (TextView) view.findViewById(R.id.content);
-//            }
-//
-//            @Override
-//            public String toString() {
-//                return super.toString() + " '" + mContentView.getText() + "'";
-//            }
-//        }
-//    }
 }

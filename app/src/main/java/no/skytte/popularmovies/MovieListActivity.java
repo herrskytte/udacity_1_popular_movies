@@ -88,6 +88,7 @@ public class MovieListActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        //TODO Cache data in saveinstancestate to avoid network calls. Only execute when empty
         new MovieListDownloader().execute();
     }
 

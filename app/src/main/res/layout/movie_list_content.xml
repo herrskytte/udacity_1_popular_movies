@@ -1,14 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/posterimage"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:adjustViewBounds="true">
-
-    <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/posterimage"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/poster_height"
-        android:scaleType="centerCrop"
-        android:adjustViewBounds="true"
-        android:contentDescription="@string/poster_alt" />
-</RelativeLayout>
+    android:layout_height="@dimen/poster_height"
+    android:scaleType="centerCrop"
+    android:adjustViewBounds="true"
+    android:contentDescription="@string/poster_alt" />

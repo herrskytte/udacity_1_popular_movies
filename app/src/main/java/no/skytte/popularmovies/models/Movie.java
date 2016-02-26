@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
+//TODO Consider Parcelable/bundle intead of Serializable
 public class Movie implements Serializable{
 
     private long id;

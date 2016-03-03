@@ -1,8 +1,6 @@
 package no.skytte.popularmovies;
 
 import android.content.Intent;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -14,15 +12,16 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.TextView;
 
-import org.springframework.http.converter.json.GsonHttpMessageConverter;
-import org.springframework.web.client.RestTemplate;
-
 import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import no.skytte.popularmovies.models.Movie;
 import no.skytte.popularmovies.models.SearchResult;
+import no.skytte.popularmovies.moviedb.RestClient;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * An activity representing a list of Movies. This activity
@@ -46,6 +45,8 @@ public class MovieListActivity extends AppCompatActivity {
 
     MovieAdapter mAdapter;
 
+    RestClient mClient;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +56,7 @@ public class MovieListActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
 
+        mClient = new RestClient();
 
         mAdapter = new MovieAdapter(this);
         gridView.setAdapter(mAdapter);
@@ -89,7 +91,25 @@ public class MovieListActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         //TODO Cache data in saveinstancestate to avoid network calls. Only execute when empty
-        new MovieListDownloader().execute();
+//        new MovieListDownloader().execute();
+        updateMovies();
+    }
+
+    private void updateMovies() {
+        Call<SearchResult> call = mClient.getMovieDbService().getMovieList(mCurrentSortOrder);
+        call.enqueue(new Callback<SearchResult>() {
+            @Override
+            public void onResponse(Call<SearchResult> call, Response<SearchResult> response) {
+                Log.i("MainActivity", "Result ok!");
+                mAdapter.setData(response.body().getResults());
+            }
+
+            @Override
+            public void onFailure(Call<SearchResult> call, Throwable t) {
+                Log.e("MainActivity", "No results!", t);
+                mAdapter.setData(new ArrayList<Movie>());
+            }
+        });
     }
 
     @Override
@@ -109,48 +129,8 @@ public class MovieListActivity extends AppCompatActivity {
                 mCurrentSortOrder = SORT_RATED;
         }
         if(!mCurrentSortOrder.equals(currentSortOrder)){
-            new MovieListDownloader().execute();
+            updateMovies();
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private class MovieListDownloader extends AsyncTask<Void, Void, SearchResult>{
-
-        private String APIKEY = "input_key_here";
-        private String BASE_URL = "http://api.themoviedb.org/3/discover/movie";
-
-        @Override
-        protected SearchResult doInBackground(Void... params) {
-            try {
-                String url = Uri.parse(BASE_URL)
-                        .buildUpon()
-                        .appendQueryParameter("api_key", APIKEY)
-                        .appendQueryParameter("vote_count.gte", "50")
-                        .appendQueryParameter("sort_by", mCurrentSortOrder)
-                        .build()
-                        .toString();
-                RestTemplate restTemplate = new RestTemplate();
-                restTemplate.getMessageConverters().add(new GsonHttpMessageConverter());
-                return restTemplate.getForObject(url, SearchResult.class);
-
-            } catch (Exception e) {
-                Log.e("MainActivity", e.getMessage(), e);
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(SearchResult movies) {
-            if(movies != null){
-                Log.i("MainActivity", "Result ok!");
-                mAdapter.setData(movies.getResults());
-            }
-            else{
-                Log.i("MainActivity", "No results!");
-                mAdapter.setData(new ArrayList<Movie>());
-            }
-        }
-
     }
 }

@@ -1,17 +1,24 @@
 package no.skytte.popularmovies;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import no.skytte.popularmovies.models.Movie;
+import no.skytte.popularmovies.models.SearchResult;
+import no.skytte.popularmovies.moviedb.RestClient;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A fragment representing a single Movie detail screen.
@@ -28,6 +35,10 @@ public class MovieDetailFragment extends Fragment {
     @Bind(R.id.movie_detail) TextView mDetailsText;
     @Bind(R.id.release_date) TextView mReleaseText;
     @Bind(R.id.votes) TextView mRatingText;
+    @Bind(R.id.trailer_list) GridView gridView;
+
+    MovieAdapter mAdapter;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,8 +59,36 @@ public class MovieDetailFragment extends Fragment {
         mReleaseText.setText(mCurrentMovie.getReleaseDate());
         mRatingText.setText(getString(R.string.rating, mCurrentMovie.getVoteAverage(), mCurrentMovie.getVoteCount()));
 
+        mAdapter = new MovieAdapter(getActivity());
+        gridView.setAdapter(mAdapter);
+
         return rootView;
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        updateMovies();
+    }
+
+    private void updateMovies() {
+        Call<SearchResult> call = new RestClient().getMovieDbService().getMovieList("popularity.desc");
+        call.enqueue(new Callback<SearchResult>() {
+            @Override
+            public void onResponse(Call<SearchResult> call, Response<SearchResult> response) {
+                Log.i("MainActivity", "Result ok!");
+                mAdapter.setData(response.body().getResults());
+            }
+
+            @Override
+            public void onFailure(Call<SearchResult> call, Throwable t) {
+                Log.e("MainActivity", "No results!", t);
+                mAdapter.setData(new ArrayList<Movie>());
+            }
+        });
+    }
+
 
     @Override
     public void onDestroy() {

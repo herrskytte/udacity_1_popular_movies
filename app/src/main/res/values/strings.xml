@@ -5,6 +5,7 @@
     <string name="poster_alt">Poster</string>
     <string name="releasedate_title">Release date</string>
     <string name="votes_title">User rating</string>
+    <string name="trailers_title">Trailers</string>
     <string name="rating">%1$s (votes: %2$s)</string>
     <string name="action_sort_popular">Show popular movies</string>
     <string name="action_sort_rated">Show highest rated movies</string>

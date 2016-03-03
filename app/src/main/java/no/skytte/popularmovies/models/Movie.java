@@ -10,7 +10,7 @@ public class Movie implements Serializable{
     private long id;
     private String title;
     private String overview;
-    @SerializedName("poster_path") private String posterPath;
+    private String posterPath;
     @SerializedName("release_date") private String releaseDate;
     @SerializedName("vote_average") private String voteAverage;
     @SerializedName("vote_count") private String voteCount;

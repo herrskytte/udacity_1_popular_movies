@@ -10,4 +10,5 @@
     <string name="action_sort_popular">Show popular movies</string>
     <string name="action_sort_rated">Show highest rated movies</string>
     <string name="no_movies_found">No movies found</string>
+    <string name="play_trailer">Play trailer</string>
 </resources>

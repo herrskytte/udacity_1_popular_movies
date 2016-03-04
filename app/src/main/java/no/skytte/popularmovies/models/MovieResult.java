@@ -3,7 +3,7 @@ package no.skytte.popularmovies.models;
 
 import java.util.List;
 
-public class SearchResult {
+public class MovieResult {
     private List<Movie> results;
 
     public List<Movie> getResults() {

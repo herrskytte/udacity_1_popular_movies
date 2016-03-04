@@ -1,7 +1,5 @@
 package no.skytte.popularmovies.models;
 
-import com.google.gson.annotations.SerializedName;
-
 import java.io.Serializable;
 
 //TODO Consider Parcelable/bundle intead of Serializable
@@ -11,9 +9,9 @@ public class Movie implements Serializable{
     private String title;
     private String overview;
     private String posterPath;
-    @SerializedName("release_date") private String releaseDate;
-    @SerializedName("vote_average") private String voteAverage;
-    @SerializedName("vote_count") private String voteCount;
+    private String releaseDate;
+    private String voteAverage;
+    private String voteCount;
 
     public long getId() {
         return id;

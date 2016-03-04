@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import no.skytte.popularmovies.models.Movie;
-import no.skytte.popularmovies.models.SearchResult;
+import no.skytte.popularmovies.models.MovieResult;
 import no.skytte.popularmovies.moviedb.RestClient;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -96,16 +96,16 @@ public class MovieListActivity extends AppCompatActivity {
     }
 
     private void updateMovies() {
-        Call<SearchResult> call = mClient.getMovieDbService().getMovieList(mCurrentSortOrder);
-        call.enqueue(new Callback<SearchResult>() {
+        Call<MovieResult> call = mClient.getMovieDbService().getMovieList(mCurrentSortOrder);
+        call.enqueue(new Callback<MovieResult>() {
             @Override
-            public void onResponse(Call<SearchResult> call, Response<SearchResult> response) {
+            public void onResponse(Call<MovieResult> call, Response<MovieResult> response) {
                 Log.i("MainActivity", "Result ok!");
                 mAdapter.setData(response.body().getResults());
             }
 
             @Override
-            public void onFailure(Call<SearchResult> call, Throwable t) {
+            public void onFailure(Call<MovieResult> call, Throwable t) {
                 Log.e("MainActivity", "No results!", t);
                 mAdapter.setData(new ArrayList<Movie>());
             }

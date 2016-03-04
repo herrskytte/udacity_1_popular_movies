@@ -1,8 +1,9 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/details_root"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="16dp"
     android:orientation="vertical">
     <TextView
@@ -54,20 +55,14 @@
         android:textIsSelectable="true"
         android:text="@string/trailers_title" />
 
-    <android.support.v4.widget.NestedScrollView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent">
-        <GridView
-            android:id="@+id/trailer_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:numColumns="2"
-            android:stretchMode="columnWidth"
-            android:horizontalSpacing="16dp"
-            android:verticalSpacing="16dp"
-            android:drawSelectorOnTop="true"
-            tools:listitem="@layout/movie_list_content" />
-    </android.support.v4.widget.NestedScrollView>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/trailer_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layoutManager="LinearLayoutManager"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:listitem="@layout/list_item_trailer" />
 
 
 </LinearLayout>

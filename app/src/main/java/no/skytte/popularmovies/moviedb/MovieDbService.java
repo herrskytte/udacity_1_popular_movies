@@ -1,6 +1,7 @@
 package no.skytte.popularmovies.moviedb;
 
 import no.skytte.popularmovies.models.MovieResult;
+import no.skytte.popularmovies.models.ReviewsResult;
 import no.skytte.popularmovies.models.TrailersResult;
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -16,4 +17,6 @@ public interface MovieDbService {
     @GET("movie/{id}/videos?api_key=" + APIKEY)
     Call<TrailersResult> getTrailers(@Path("id") long id);
 
+    @GET("movie/{id}/reviews?api_key=" + APIKEY)
+    Call<ReviewsResult> getReviews(@Path("id") long id);
 }

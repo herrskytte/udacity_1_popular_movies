@@ -45,7 +45,23 @@
         android:paddingTop="8dp"
         android:textIsSelectable="true"
         tools:text="4.2" />
-
+    <TextView
+        android:id="@+id/reviews_title"
+        style="@style/Text.Large.Title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="16dp"
+        android:textIsSelectable="true"
+        android:text="@string/reviews_title" />
+    <Button
+        android:id="@+id/reviews_btn"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="8dp"
+        android:paddingLeft="0dp"
+        android:gravity="start|center_vertical"
+        android:text="@string/user_reviews_btn" />
     <TextView
         android:id="@+id/trailers_title"
         style="@style/Text.Large.Title"
@@ -54,16 +70,6 @@
         android:paddingTop="16dp"
         android:textIsSelectable="true"
         android:text="@string/trailers_title" />
-
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/trailer_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layoutManager="LinearLayoutManager"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:listitem="@layout/list_item_trailer" />
-
 
 </LinearLayout>
 

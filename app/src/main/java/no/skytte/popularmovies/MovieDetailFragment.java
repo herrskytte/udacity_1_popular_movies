@@ -1,21 +1,21 @@
 package no.skytte.popularmovies;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import no.skytte.popularmovies.models.Movie;
 import no.skytte.popularmovies.models.Trailer;
 import no.skytte.popularmovies.models.TrailersResult;
@@ -40,10 +40,8 @@ public class MovieDetailFragment extends Fragment {
     @Bind(R.id.movie_detail) TextView mDetailsText;
     @Bind(R.id.release_date) TextView mReleaseText;
     @Bind(R.id.votes) TextView mRatingText;
-    @Bind(R.id.trailer_list) RecyclerView mTrailersList;
 
-    TrailersAdapter mAdapter;
-
+    List<Trailer> mTrailers;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,6 +49,12 @@ public class MovieDetailFragment extends Fragment {
 
         if (getArguments().containsKey(ARG_MOVIE)) {
             mCurrentMovie = (Movie) getArguments().getSerializable(ARG_MOVIE);
+        }
+
+        setRetainInstance(true);
+
+        if(mTrailers == null){
+            getTrailers();
         }
     }
 
@@ -64,10 +68,10 @@ public class MovieDetailFragment extends Fragment {
         mReleaseText.setText(mCurrentMovie.getReleaseDate());
         mRatingText.setText(getString(R.string.rating, mCurrentMovie.getVoteAverage(), mCurrentMovie.getVoteCount()));
 
-        mTrailersList.setNestedScrollingEnabled(false);
-        mTrailersList.setHasFixedSize(false);
-        mAdapter = new TrailersAdapter(getActivity());
-        mTrailersList.setAdapter(mAdapter);
+
+        if(mTrailers != null){
+            updateTrailerViews();
+        }
 
         return rootView;
     }
@@ -76,7 +80,6 @@ public class MovieDetailFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        getTrailers();
     }
 
     private void getTrailers() {
@@ -85,33 +88,40 @@ public class MovieDetailFragment extends Fragment {
             @Override
             public void onResponse(Call<TrailersResult> call, Response<TrailersResult> response) {
                 Log.i("MovieDetailFragment", "Result ok!");
-                List<Trailer> trailersList = response.body().getResults();
-//                for(int i= 0; i < 100; i++){
-//                    trailersList.add(new Trailer());
-//                }
-                mAdapter.updateDataset(response.body().getResults());
-
-                for (final Trailer t : trailersList) {
-                    View v = LayoutInflater.from(getContext())
-                            .inflate(R.layout.list_item_trailer, mRootLayout, false);
-                    TextView tv = ButterKnife.findById(v, R.id.trailer_name);
-                    tv.setText(t.getName());
-                    v.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Toast.makeText(getActivity(), "Clicked" + t.getId(), Toast.LENGTH_LONG).show();
-                        }
-                    });
-                    mRootLayout.addView(v);
-                }
+                mTrailers = response.body().getResults();
+                updateTrailerViews();
             }
 
             @Override
             public void onFailure(Call<TrailersResult> call, Throwable t) {
                 Log.e("MovieDetailFragment", "No results!", t);
-                mAdapter.updateDataset(new ArrayList<Trailer>());
             }
         });
+    }
+
+    private void updateTrailerViews() {
+        for (final Trailer t : mTrailers) {
+            View v = LayoutInflater.from(getContext())
+                    .inflate(R.layout.list_item_trailer, mRootLayout, false);
+            TextView tv = ButterKnife.findById(v, R.id.trailer_name);
+            tv.setText(t.getName());
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=" + t.getKey()));
+                    startActivity(intent);
+                    //Toast.makeText(getActivity(), "Clicked" + t.getId(), Toast.LENGTH_LONG).show();
+                }
+            });
+            mRootLayout.addView(v);
+        }
+    }
+
+    @OnClick(R.id.reviews_btn)
+    public void clickSeeReviews(){
+        Intent intent = new Intent(getActivity(), ReviewsActivity.class);
+        intent.putExtra(ReviewsActivity.ARG_MOVIE, mCurrentMovie);
+        startActivity(intent);
     }
 
 

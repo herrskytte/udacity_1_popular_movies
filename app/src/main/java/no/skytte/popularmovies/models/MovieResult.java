@@ -1,12 +1,12 @@
 package no.skytte.popularmovies.models;
 
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class MovieResult {
-    private List<Movie> results;
+    private ArrayList<Movie> results;
 
-    public List<Movie> getResults() {
+    public ArrayList<Movie> getResults() {
         return results;
     }
 }

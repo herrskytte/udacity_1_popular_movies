@@ -37,14 +37,15 @@ public class ReviewsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_reviews);
         ButterKnife.bind(this);
 
-        mCurrentMovie = (Movie) getIntent().getSerializableExtra(ARG_MOVIE);
+        mCurrentMovie = getIntent().getParcelableExtra(ARG_MOVIE);
         if(mCurrentMovie == null){
             finish();
             return;
         }
 
+        toolbar.setTitle("Reviews for: " + mCurrentMovie.getTitle());
         setSupportActionBar(toolbar);
-        toolbar.setTitle(getTitle());
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mClient = new RestClient();
 
@@ -84,26 +85,4 @@ public class ReviewsActivity extends AppCompatActivity {
             }
         });
     }
-//
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.menu_main, menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        String currentSortOrder = mCurrentSortOrder;
-//        switch (item.getItemId()){
-//            case R.id.action_sort_popular :
-//                mCurrentSortOrder = SORT_POPULAR;
-//                break;
-//            case R.id.action_sort_rated :
-//                mCurrentSortOrder = SORT_RATED;
-//        }
-//        if(!mCurrentSortOrder.equals(currentSortOrder)){
-//            updateMovies();
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
 }

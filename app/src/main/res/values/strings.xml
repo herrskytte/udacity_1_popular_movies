@@ -10,7 +10,12 @@
     <string name="rating">%1$s (votes: %2$s)</string>
     <string name="action_sort_popular">Show popular movies</string>
     <string name="action_sort_rated">Show highest rated movies</string>
+    <string name="action_sort_fav">Show favorites</string>
+    <string name="action_share_url">Share trailer</string>
     <string name="no_movies_found">No movies found</string>
     <string name="play_trailer">Play trailer</string>
     <string name="user_reviews_btn">See user reviews</string>
+    <string name="favorite_text">Mark as favorite</string>
+    <string name="favorite_undo_text">Remove from favorites</string>
+    <string name="no_trailers">No trailers to share for this movie</string>
 </resources>

@@ -9,14 +9,14 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface MovieDbService {
-    String APIKEY = "d9987f6d38c9c183d75323198a12406c";
+    String APIKEY = "insertkeyhere";
 
     @GET("discover/movie?api_key=" + APIKEY +"&vote_count.gte=50")
     Call<MovieResult> getMovieList(@Query("sort_by") String sort);
 
     @GET("movie/{id}/videos?api_key=" + APIKEY)
-    Call<TrailersResult> getTrailers(@Path("id") long id);
+    Call<TrailersResult> getTrailers(@Path("id") String id);
 
     @GET("movie/{id}/reviews?api_key=" + APIKEY)
-    Call<ReviewsResult> getReviews(@Path("id") long id);
+    Call<ReviewsResult> getReviews(@Path("id") String id);
 }

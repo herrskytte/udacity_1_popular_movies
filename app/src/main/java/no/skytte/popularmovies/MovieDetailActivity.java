@@ -2,18 +2,15 @@ package no.skytte.popularmovies;
 
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import no.skytte.popularmovies.models.Movie;
 
 /**
@@ -40,7 +37,7 @@ public class MovieDetailActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        Movie selectedMovie = (Movie) getIntent().getSerializableExtra(MovieDetailFragment.ARG_MOVIE);
+        Movie selectedMovie = (Movie) getIntent().getParcelableExtra(MovieDetailFragment.ARG_MOVIE);
         if(selectedMovie == null){
             finish();
             return;
@@ -62,7 +59,7 @@ public class MovieDetailActivity extends AppCompatActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putSerializable(MovieDetailFragment.ARG_MOVIE, selectedMovie);
+            arguments.putParcelable(MovieDetailFragment.ARG_MOVIE, selectedMovie);
             MovieDetailFragment fragment = new MovieDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()

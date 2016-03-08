@@ -40,6 +40,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="no.skytte.popularmovies.MovieDetailActivity" />
         </activity>
+        <provider
+            android:name=".provider.MoviesProvider"
+            android:authorities="no.skytte.popularmovies"
+            android:exported="false"
+            android:label="@string/app_name" />
     </application>
 
 </manifest>

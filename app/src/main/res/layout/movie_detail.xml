@@ -6,6 +6,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="16dp"
     android:orientation="vertical">
+    <Button
+        android:id="@+id/favorite_btn"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="8dp"
+        android:paddingLeft="0dp"
+        android:paddingBottom="8dp"
+        android:gravity="start|center_vertical"
+        android:drawableLeft="@drawable/ic_star_border"
+        android:drawablePadding="8dp"
+        android:text="@string/favorite_text" />
     <TextView
         android:id="@+id/movie_detail"
         style="@style/Text.Medium"
@@ -60,6 +72,7 @@
         android:layout_height="wrap_content"
         android:paddingTop="8dp"
         android:paddingLeft="0dp"
+        android:paddingBottom="@dimen/default_margin"
         android:gravity="start|center_vertical"
         android:text="@string/user_reviews_btn" />
     <TextView
@@ -67,7 +80,6 @@
         style="@style/Text.Large.Title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="16dp"
         android:textIsSelectable="true"
         android:text="@string/trailers_title" />
 

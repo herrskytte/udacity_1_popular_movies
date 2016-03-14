@@ -117,6 +117,9 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     }
 
     private void updateTrailerViews() {
+        if(getActivity() == null){
+            return;
+        }
         if(mTrailers.isEmpty()){
             mTrailersTitle.setVisibility(View.GONE);
         }
